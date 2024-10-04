@@ -1,9 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
-import pyodbc
+# import pyodbc
+import sqlite3
 from googleapiclient.discovery import build
-from matplotlib import font_manager
+# from matplotlib import font_manager
+from matplotlib.ticker import FuncFormatter
 from datetime import datetime
 from tkcalendar import Calendar
 from Youtube_analysis import fetch_most_views_videos_stats
@@ -52,25 +54,35 @@ def fetch_data():
 
     fetch_most_views_videos_stats(youtube, publish_after_iso, publish_before_iso)
 
-def most_views_channels():
-    server = os.getenv("server")
-    database = os.getenv("database")
-    username = os.getenv("username")
-    password = os.getenv("password")
-    driver = os.getenv("driver")
+# Define the custom formatter
+def millions_formatter(x, pos):
+    return f'{x*1e-6:.1f}M'
 
-    connection_string = f'DRIVER={driver};SERVER=tcp:{server};PORT=1433;DATABASE={database};UID={username};PWD={password};CHARSET=UTF8;'
-    conn = pyodbc.connect(connection_string)
+def most_views_channels():
+    # Applicable when using Azure SQL database
+    # server = os.getenv("server")
+    # database = os.getenv("database")
+    # username = os.getenv("username")
+    # password = os.getenv("password")
+    # driver = os.getenv("driver")
+
+    # connection_string = f'DRIVER={driver};SERVER=tcp:{server};PORT=1433;DATABASE={database};UID={username};PWD={password};CHARSET=UTF8;'
+
+    conn = sqlite3.connect('Youtube_database.db')
 
     publish_after = calendar_start_date.get_date()
     publish_before = calendar_end_date.get_date()
 
+    # Convert to proper date format (YYYY-MM-DD)
+    publish_after_formatted = datetime.strptime(publish_after, "%m/%d/%Y").strftime("%Y-%m-%d")
+    publish_before_formatted = datetime.strptime(publish_before, "%m/%d/%Y").strftime("%Y-%m-%d")
+
     query = '''SELECT channel_title, SUM(view_count) AS total_view_count, SUM(like_count) AS total_like_count, SUM(comment_count) AS total_comment_count
-               FROM [dbo].[Search_list_table]
-               WHERE data_collected_date = FORMAT(GETDATE(), 'yyyy-MM-dd') AND publish_time BETWEEN ? AND ?
+               FROM Youtube_videos_info
+               WHERE data_collected_date = DATE('now', 'localtime') AND publish_time BETWEEN ? AND ?
                GROUP BY channel_id, channel_title
                ORDER BY total_view_count DESC'''
-    df = pd.read_sql_query(query, conn, params = [publish_after, publish_before])
+    df = pd.read_sql_query(query, conn, params = [publish_after_formatted, publish_before_formatted])
     conn.close()
 
     bar_width = 0.25
@@ -91,25 +103,30 @@ def most_views_channels():
     plt.show()
 
 def most_views_categories():
-    server = os.getenv("server")
-    database = os.getenv("database")
-    username = os.getenv("username")
-    password = os.getenv("password")
-    driver = os.getenv("driver")
+    # Applicable when using Azure SQL database
+    # server = os.getenv("server")
+    # database = os.getenv("database")
+    # username = os.getenv("username")
+    # password = os.getenv("password")
+    # driver = os.getenv("driver")
 
-    connection_string = f'DRIVER={driver};SERVER=tcp:{server};PORT=1433;DATABASE={database};UID={username};PWD={password};CHARSET=UTF8;'
-    conn = pyodbc.connect(connection_string)
+    # connection_string = f'DRIVER={driver};SERVER=tcp:{server};PORT=1433;DATABASE={database};UID={username};PWD={password};CHARSET=UTF8;'
+    conn = sqlite3.connect('Youtube_database.db')
 
     publish_after = calendar_start_date.get_date()
     publish_before = calendar_end_date.get_date()
 
+    # Convert to proper date format (YYYY-MM-DD)
+    publish_after_formatted = datetime.strptime(publish_after, "%m/%d/%Y").strftime("%Y-%m-%d")
+    publish_before_formatted = datetime.strptime(publish_before, "%m/%d/%Y").strftime("%Y-%m-%d")
+
     query = '''SELECT video_category_name, SUM(view_count) AS total_view_count, COUNT(video_id) AS total_number_of_video, SUM(view_count)/COUNT(video_id) AS number_of_audience_per_video
-               FROM [dbo].[Search_list_table]
-               WHERE data_collected_date = FORMAT(GETDATE(), 'yyyy-MM-dd') AND publish_time BETWEEN ? AND ?
+               FROM Youtube_videos_info
+               WHERE data_collected_date = DATE('now', 'localtime') AND publish_time BETWEEN ? AND ?
                GROUP BY video_category_name
                ORDER BY number_of_audience_per_video DESC'''
     
-    df = pd.read_sql_query(query, conn, params = [publish_after, publish_before])
+    df = pd.read_sql_query(query, conn, params = [publish_after_formatted, publish_before_formatted])
     conn.close()
 
     plt.figure(figsize = (12, 8))
@@ -121,22 +138,27 @@ def most_views_categories():
     plt.show()
 
 def most_views_publish_time():
-    server = os.getenv("server")
-    database = os.getenv("database")
-    username = os.getenv("username")
-    password = os.getenv("password")
-    driver = os.getenv("driver")
+    # Applicable when using Azure SQL database
+    # server = os.getenv("server")
+    # database = os.getenv("database")
+    # username = os.getenv("username")
+    # password = os.getenv("password")
+    # driver = os.getenv("driver")
 
-    connection_string = f'DRIVER={driver};SERVER=tcp:{server};PORT=1433;DATABASE={database};UID={username};PWD={password};CHARSET=UTF8;'
-    conn = pyodbc.connect(connection_string)
+    # connection_string = f'DRIVER={driver};SERVER=tcp:{server};PORT=1433;DATABASE={database};UID={username};PWD={password};CHARSET=UTF8;'
+    conn = sqlite3.connect('Youtube_database.db')
 
     publish_after = calendar_start_date.get_date()
     publish_before = calendar_end_date.get_date()
 
-    query = '''SELECT * FROM [dbo].[Search_list_table]
-               WHERE data_collected_date = FORMAT(GETDATE(), 'yyyy-MM-dd') AND publish_time BETWEEN ? AND ?'''
+    # Convert to proper date format (YYYY-MM-DD)
+    publish_after_formatted = datetime.strptime(publish_after, "%m/%d/%Y").strftime("%Y-%m-%d")
+    publish_before_formatted = datetime.strptime(publish_before, "%m/%d/%Y").strftime("%Y-%m-%d")
+
+    query = '''SELECT * FROM Youtube_videos_info
+               WHERE data_collected_date = DATE('now', 'localtime') AND publish_time BETWEEN ? AND ?'''
     
-    df = pd.read_sql_query(query, conn, params = [publish_after, publish_before])
+    df = pd.read_sql_query(query, conn, params = [publish_after_formatted, publish_before_formatted])
     df["publish_time"] = pd.to_datetime(df["publish_time"], format = "%Y-%m-%dT%H:%M:%SZ")
     df["publish_hour"] = df["publish_time"].dt.hour
     hourly_counts = df.groupby(by="publish_hour")["view_count"].sum().reset_index(name = 'total_view_count')

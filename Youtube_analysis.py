@@ -1,6 +1,7 @@
 from googleapiclient.discovery import build
 from datetime import datetime
-import pyodbc
+# import pyodbc
+import sqlite3
 import json
 import os
 from dotenv import load_dotenv
@@ -8,48 +9,87 @@ from dotenv import load_dotenv
 load_dotenv()
 
 api_key = os.getenv("api_key")
-server = os.getenv("server")
-database = os.getenv("database")
-username = os.getenv("username")
-password = os.getenv("password")
-driver = os.getenv("driver")
 
-connection_string = f'DRIVER={driver};SERVER=tcp:{server};PORT=1433;DATABASE={database};UID={username};PWD={password};CHARSET=UTF8;'
+'''The following documentations are applicable when using Azure SQL database'''
+# server = os.getenv("server")
+# database = os.getenv("database")
+# username = os.getenv("username")
+# password = os.getenv("password")
+# driver = os.getenv("driver")
 
-# Create database and table
+# connection_string = f'DRIVER={driver};SERVER=tcp:{server};PORT=1433;DATABASE={database};UID={username};PWD={password};CHARSET=UTF8;'
+
+# Function of creating database and table using Azure SQL database
+
+# def create_table():
+#     conn = pyodbc.connect(connection_string)
+#     cursor = conn.cursor()
+#     cursor.execute('''IF OBJECT_ID('Search_list_table', 'U') IS NULL
+#                    BEGIN 
+#                    CREATE TABLE Search_list_table(
+#                 data_collected_date NVARCHAR(20) NOT NULL,
+#                 video_id NVARCHAR(50) NOT NULL,
+#                 video_title NVARCHAR(255) NOT NULL,
+#                 publish_time DATETIME NOT NULL,
+#                 publish_month_day NVARCHAR(50) NOT NULL,
+#                 publish_month INT NOT NULL,
+#                 publish_day INT NOT NULL,
+#                 publish_after DATETIME NOT NULL,
+#                 publish_before DATETIME NOT NULL,
+#                 channel_id NVARCHAR(50) NOT NULL,
+#                 channel_title NVARCHAR(50) NOT NULL,
+#                 video_description NVARCHAR(4000) NOT NULL,
+#                 video_thumbnails NVARCHAR(4000) NOT NULL,
+#                 liveBroadcastContent NVARCHAR(50),
+#                 view_count INT,
+#                 like_count INT,
+#                 comment_count INT,
+#                 video_length NVARCHAR(255) NOT NULL,
+#                 video_category_id NVARCHAR(255) NOT NULL,
+#                 video_category_name NVARCHAR(255) NOT NULL,
+#                 video_default_language NVARCHAR(20),
+#                 video_tags NVARCHAR(4000),
+#                 video_made_For_Kids BIT
+#                 )
+#                 END''')
+#     conn.commit()
+#     conn.close()
+
+
+# Create database and table using sqlite
 def create_table():
-    conn = pyodbc.connect(connection_string)
+    conn = sqlite3.connect('Youtube_database.db')
     cursor = conn.cursor()
-    cursor.execute('''IF OBJECT_ID('Search_list_table', 'U') IS NULL
-                   BEGIN 
-                   CREATE TABLE Search_list_table(
-                data_collected_date NVARCHAR(20) NOT NULL,
-                video_id NVARCHAR(50) NOT NULL,
-                video_title NVARCHAR(255) NOT NULL,
-                publish_time DATETIME NOT NULL,
-                publish_month_day NVARCHAR(50) NOT NULL,
-                publish_month INT NOT NULL,
-                publish_day INT NOT NULL,
-                publish_after DATETIME NOT NULL,
-                publish_before DATETIME NOT NULL,
-                channel_id NVARCHAR(50) NOT NULL,
-                channel_title NVARCHAR(50) NOT NULL,
-                video_description NVARCHAR(4000) NOT NULL,
-                video_thumbnails NVARCHAR(4000) NOT NULL,
-                liveBroadcastContent NVARCHAR(50),
-                view_count INT,
-                like_count INT,
-                comment_count INT,
-                video_length NVARCHAR(255) NOT NULL,
-                video_category_id NVARCHAR(255) NOT NULL,
-                video_category_name NVARCHAR(255) NOT NULL,
-                video_default_language NVARCHAR(20),
-                video_tags NVARCHAR(4000),
-                video_made_For_Kids BIT
-                )
-                END''')
+    query = '''CREATE TABLE IF NOT EXISTS Youtube_videos_info (
+                 data_collected_date NVARCHAR(20) NOT NULL,
+                 video_id NVARCHAR(50) NOT NULL,
+                 video_title NVARCHAR(255) NOT NULL,
+                 publish_time DATETIME NOT NULL,
+                 publish_month_day NVARCHAR(50) NOT NULL,
+                 publish_month INT NOT NULL,
+                 publish_day INT NOT NULL,
+                 publish_after DATETIME NOT NULL,
+                 publish_before DATETIME NOT NULL,
+                 channel_id NVARCHAR(50) NOT NULL,
+                 channel_title NVARCHAR(50) NOT NULL,
+                 video_description NVARCHAR(4000) NOT NULL,
+                 video_thumbnails NVARCHAR(4000) NOT NULL,
+                 liveBroadcastContent NVARCHAR(50),
+                 view_count INT,
+                 like_count INT,
+                 comment_count INT,
+                 video_length NVARCHAR(255) NOT NULL,
+                 video_category_id NVARCHAR(255) NOT NULL,
+                 video_category_name NVARCHAR(255) NOT NULL,
+                 video_default_language NVARCHAR(20),
+                 video_tags NVARCHAR(4000),
+                 video_made_For_Kids BIT)
+            '''
+    cursor.execute(query)
     conn.commit()
     conn.close()
+
+
 
 # Create a resource object to interact with google specific API
 youtube = build('youtube', 'v3', developerKey = api_key)
@@ -170,6 +210,7 @@ def fetch_most_views_videos_stats(youtube, publish_after, publish_before):
         merged_data = {**basic_data, **detail_data, "video_category_name" : video_category_name} 
         merged_data_list.append(merged_data)
 
+    '''Create table and fetch most views videos's data into table'''
     create_table()
 
     for merged_data_detail in merged_data_list:
@@ -199,9 +240,9 @@ def fetch_most_views_videos_stats(youtube, publish_after, publish_before):
             "video_made_For_Kids" : 1 if merged_data_detail["video_made_For_Kids"] else 0
         }
 
-        conn = pyodbc.connect(connection_string)
+        conn = sqlite3.connect('Youtube_database.db')
         cursor = conn.cursor()
-        cursor.execute('''INSERT INTO Search_list_table 
+        cursor.execute('''INSERT INTO Youtube_videos_info 
                     (data_collected_date, video_id, video_title, publish_time, publish_month_day, publish_month, publish_day, publish_after, publish_before, channel_id, channel_title, video_description, video_thumbnails, liveBroadcastContent, view_count, like_count, comment_count, video_length, video_category_id, video_category_name, video_default_language, video_tags, video_made_For_Kids) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ''', 
                     (most_views_data["data_collected_date"], most_views_data["video_id"], most_views_data["video_title"], most_views_data["publish_time"], most_views_data["publish_month_day"], most_views_data["publish_month"], most_views_data["publish_day"], most_views_data["publish_after"], most_views_data["publish_before"], most_views_data["channel_id"], most_views_data["channel_title"], most_views_data["video_description"], most_views_data["video_thumbnails"], most_views_data["liveBroadcastContent"], most_views_data["view_count"], most_views_data["like_count"], most_views_data["comment_count"], most_views_data["video_length"], most_views_data["video_category_id"], most_views_data["video_category_name"], most_views_data["video_default_language"], most_views_data["video_tags"], most_views_data["video_made_For_Kids"]))
