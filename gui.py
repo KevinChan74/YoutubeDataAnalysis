@@ -22,11 +22,13 @@ youtube = build('youtube', 'v3', developerKey = api_key)
 # Register each font path
 
 font_paths = [
-    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC/Noto_Sans/NotoSans-VariableFont_wdth,wght.ttf',
-    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC/Noto_Sans_JP/NotoSansJP-VariableFont_wght.ttf',
-    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC/Noto_Sans_KR/NotoSansKR-VariableFont_wght.ttf',
-    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC/Noto_Sans_SC/NotoSansSC-VariableFont_wght.ttf',
-    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC/Noto_Sans_TC/NotoSansTC-VariableFont_wght.ttf'
+    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC,Noto_Sans_Arabic,Noto_Naskh_Arabic/Noto_Sans/NotoSans-VariableFont_wdth,wght.ttf',
+    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC,Noto_Sans_Arabic,Noto_Naskh_Arabic/Noto_Sans_JP/NotoSansJP-VariableFont_wght.ttf',
+    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC,Noto_Sans_Arabic,Noto_Naskh_Arabic/Noto_Sans_KR/NotoSansKR-VariableFont_wght.ttf',
+    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC,Noto_Sans_Arabic,Noto_Naskh_Arabic/Noto_Sans_SC/NotoSansSC-VariableFont_wght.ttf',
+    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC,Noto_Sans_Arabic,Noto_Naskh_Arabic/Noto_Sans_TC/NotoSansTC-VariableFont_wght.ttf',
+    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC,Noto_Sans_Arabic,Noto_Naskh_Arabic/Noto_Sans_Arabic/NotoSansArabic-VariableFont_wdth,wght.ttf',
+    '/Users/hickeychan/Desktop/Noto_Sans,Noto_Sans_JP,Noto_Sans_KR,Noto_Sans_SC,Noto_Sans_TC,Noto_Sans_Arabic,Noto_Naskh_Arabic/Noto_Naskh_Arabic/NotoNaskhArabic-VariableFont_wght.ttf',
 ]
 
 for path in font_paths:

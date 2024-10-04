@@ -156,9 +156,9 @@ def fetch_most_views_videos_stats(youtube, publish_after, publish_before):
         video_category_name = category_id_name_dict["video_category_name"]
         all_video_category_id_name_data_dict[video_category_id] = video_category_name
 
-    print(len(all_video_basic_data))
-    print(len(all_video_detail_data))
-    print(len(all_video_category_id_name_data_list_of_dict))
+    print(f"There are {len(all_video_basic_data)} video basic data")
+    print(f"There are {len(all_video_detail_data)} video detail data")
+    print(f"There are {len(all_video_category_id_name_data_list_of_dict)} video category id : video category name elements(dictionary) in this list")
 
     if len(all_video_basic_data) != len(all_video_detail_data):
         raise ValueError("Lists must be the same length to merge completely")
