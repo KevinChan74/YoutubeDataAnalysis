@@ -49,7 +49,7 @@ This project aims to create a YouTube video ranking table to help individuals an
 
 # 📝 Elements Built
 ## Workflow
-<img src="./Workflow.png" alt = "workflow.png" height = 100 width = 900>
+<img src="./workflow.png" alt = "workflow.png" height = 100 width = 900>
 
 <br>
 
