@@ -2,7 +2,6 @@
 <img src = "./banner.png" alt = "Banner" height = 300 width = 530>
 <br>
 <br>
-<br>
 
 # Table of contents
 1. [About](#-about)
@@ -12,7 +11,6 @@
 5. [Elements Built](#-elements-built)
 6. [How to Build](#-how-to-build)
 7. [Contact](#-contact)
-<br>
 <br>
 
 # 📚 About
@@ -37,7 +35,7 @@ This project aims to create a YouTube video ranking table to help individuals an
 4. **positive_reply_rate:** The ratio of positive replies to the total sentiment replies on comments, reflecting viewer support and engagement. positive_comment_rate is prioritized over positive_reply_rate as comments are directly visible on the video link, while replies are less prominent
 <br>
 <br>
-<br>
+
 # ❗️ Important Notes
 1. **First-Time Use:** Select your desired analysis start and end dates using the calendars, then press "Fetch videos' data" to collect data. This initial fetch enables all functions. Until this step is completed and shows "Data fetching finished!", no other buttons will work
 
@@ -48,7 +46,6 @@ This project aims to create a YouTube video ranking table to help individuals an
 4. **Exploring New Date Ranges:** Click "Remove database" before selecting a new date range to ensure accurate results. Once "Success: Database successfully removed!" appears, return to Step 1 to analyze another period
 <br>
 <br>
-<br>
 
 # 📝 Elements Built
 ## Workflow
@@ -56,7 +53,7 @@ This project aims to create a YouTube video ranking table to help individuals an
 
 <br>
 
-**1. Data Extraction:** Data Extracted through methods in [Youtube Data API](https://developers.google.com/youtube/v3), including [Search](https://developers.google.com/youtube/v3/docs/search), [Channels](https://developers.google.com/youtube/v3/docs/search), [Videos](https://developers.google.com/youtube/v3/docs/videos), [VideoCategories](https://developers.google.com/youtube/v3/docs/videoCategories), [CommentThreads](https://developers.google.com/youtube/v3/docs/videoCategories) and [Comments](https://developers.google.com/youtube/v3/docs/comments)
+**1. Data Extraction:** Data Extracted through methods in [Youtube Data API](https://developers.google.com/youtube/v3), including [Search](https://developers.google.com/youtube/v3/docs/search), [Channels](https://developers.google.com/youtube/v3/docs/channels), [Videos](https://developers.google.com/youtube/v3/docs/videos), [VideoCategories](https://developers.google.com/youtube/v3/docs/videoCategories), [CommentThreads](https://developers.google.com/youtube/v3/docs/commentThreads) and [Comments](https://developers.google.com/youtube/v3/docs/comments)
 <br>
 
 **2. Sentiment Analysis:** Applied [DistilBERT](https://huggingface.co/docs/transformers/en/model_doc/distilbert) to do comments' & replies' sentiment analysis
@@ -155,7 +152,6 @@ copy the following code to your terminal:
 git clone https://github.com/KevinChan74/YoutubeDataAnalysis.git
 ```
 <br>
-
 
 # 📧 Contact
 If you're interested in my project, please feel free to contact me through email, my email is kevincyhei@gmail.com.
