@@ -9,8 +9,7 @@
 3. [Key Assumption](#-key-assumption)
 4. [Important Notes](#️-important-notes)
 5. [Elements Built](#-elements-built)
-6. [How to Build](#-how-to-build)
-7. [Contact](#-contact)
+6. [Contact](#-contact)
 <br>
 
 # 📚 About
