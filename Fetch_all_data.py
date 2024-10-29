@@ -582,4 +582,5 @@ def analyze_sentiment(comment: str) -> str:
 
     sentiment_analyzer = pipeline(model='distilbert/distilbert-base-uncased-finetuned-sst-2-english', device=0)
     result = sentiment_analyzer(each_comment_content)[0]
+    print(result)
     return result['label']
